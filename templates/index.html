@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Details Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root {
+            --primary: #4e73df;
+            --secondary: #f8f9fc;
+            --accent: #1cc88a;
+            --danger: #e74a3b;
+            --gray: #6c757d;
+            --text-dark: #343a40;
+            --text-light: #6c757d;
+            --input-bg: #f8f9fa;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to right, #e0eafc, #cfdef3);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .logo {
+            max-height: 80px; /* Adjust based on your logo */
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+
+        h1 {
+            text-align: center;
+            color: white;
+            background-color: var(--primary);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            width: 100%;
+            text-align: left;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .form-control {
+            width: 100%; /* Ensures full-width inputs */
+            box-sizing: border-box; /* Makes sure padding is included in total width */
+        }
+
+        .form-control-container {
+            flex: 1;
+            width: 100%;
+        }
+
+        .checkbox-group {
+            margin-left: 200px; /* Align with input fields */
+            width: calc(100% - 200px);
+        }
+
+        .checkbox-group label {
+            margin-left: 10px; /* Space between the checkbox and label */
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="date"],
+        .form-group input[type="number"],
+        .form-group select,
+        .form-group textarea {
+            flex: 1;
+            min-width: 250px; /* Minimum width for inputs */
+            padding: 12px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: #f9fafb;
+            font-size: 0.95em;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        input[type="number"],
+        select {
+            padding: 12px 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: var(--input-bg);
+            font-size: 1em;
+            transition: box-shadow 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.25);
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .form-group.d-none {
+            display: none;
+        }
+        
+        .form-group select {
+            height: 46px; /* Matches input field height */
+        }
+
+        .submit-row {
+            text-align: center;
+        }
+
+        button[type="submit"] {
+            background-color: var(--accent);
+            color: white;
+            padding: 14px 26px;
+            font-size: 1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #17a673;
+            transform: translateY(-2px);
+        }
+
+        .lgd-code {
+            font-style: italic;
+            color: var(--primary);
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                max-height: 60px; /* Smaller logo on mobile */
+            }
+        }
+
+        .logo:hover {
+            transform: scale(1.02);
+            transition: transform 0.3s ease;
+        }
+
+        /* Add shadow for depth */
+        .logo-container {
+            padding: 15px 0;
+            background: white;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        @media screen and (min-width: 768px) {
+            .form-group {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .form-group label {
+                width: 100%;
+                margin-bottom: 8px;
+            }
+
+            .form-group input[type="text"],
+            .form-group input[type="email"],
+            .form-group input[type="date"],
+            .form-group input[type="number"],
+            .form-group select {
+                width: 100%;
+                min-width: auto;
+            }
+
+            .checkbox-group {
+                margin-left: 0;
+            }
+        }
+        @media screen and (max-width: 767px) {
+            .checkbox-group {
+                padding-left: 0;
+                margin-top: -10px;
+                margin-bottom: 10px;
+            }
+        }
+        .alert {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #grampanchayat {
+            width: 100% !important;
+            height: 46px;
+            padding: 12px 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: var(--input-bg);
+            font-size: 1em;
+            transition: box-shadow 0.2s;
+        }
+
+        #contactNumber {
+            width: 100% !important;
+            flex: 1; /* Take remaining space */
+        }
+
+        /* Fix Permanent Address Field */
+        #permanentAddress {
+            width: 100% !important;
+            min-height: 40px; /* Slightly taller for address */
+        }
+
+        /* LGD Code display styling */
+        .lgd-code-display {
+            margin-top: 8px;
+            font-size: 0.9em;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding-left: 5px;
+        }
+
+        .lgd-code-display::before {
+            content: "LGD Code:";
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-right: 5px;
+        }
+
+        /* Responsive adjustments */
+        @media screen and (min-width: 768px) {
+            .form-group .form-control-container {
+                width: 65%;
+            }
+            
+            .lgd-code-display {
+                padding-left: 0;
+            }
+        }
+
+        .address-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .address-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .address-row input {
+            flex: 1;
+            min-width: 0; /* Allows proper shrinking */
+        }
+
+        /* Make address inputs match other fields */
+        .address-fields input {
+            padding: 12px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: #f9fafb;
+            font-size: 0.95em;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .address-row {
+                flex-direction: column;
+            }
+
+            input:valid {
+                border-color: #1cc88a !important;
+            }
+
+            /* Invalid state */
+            input:invalid {
+                border-color: #e74a3b !important;
+            }
+
+            /* Pincode specific styling */
+            input[pattern="^\d{6}$"] {
+                letter-spacing: 1px;
+                font-family: monospace;
+            }
+
+        }
+
+        .address-checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            width: 100%;
+            padding-left: 0; /* Reset any inherited padding */
+        }
+
+        .address-checkbox-group input[type="checkbox"] {
+            margin-right: 8px;
+            width: auto; /* Reset fixed width if any */
+        }
+
+        .address-checkbox-group label {
+            width: auto !important; /* Override form-group label width */
+            font-weight: normal;
+            margin-bottom: 0;
+            padding-right: 0;
+            text-align: left;
+        }
+
+        /* Desktop Alignment */
+        @media screen and (min-width: 768px) {
+            .address-checkbox-group {
+                margin-left: 0; /* Remove left margin */
+                padding-left: 0; /* Remove left padding */
+            }
+        }
+
+        /* Mobile Alignment */
+        @media screen and (max-width: 767px) {
+            .address-checkbox-group {
+                margin-left: 0;
+            }
+        }
+
+        #cibilScore {
+            width: 100px; /* Smaller width for score field */
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .field-note {
+            color: var(--gray);
+            font-size: 0.8em;
+            font-style: italic;
+        }
+
+        .search-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .search-section h3 {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        #searchTerm {
+            padding: 12px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 0.95em;
+            flex: 1;
+        }
+
+        #searchBtn, #newRecordBtn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        #searchBtn {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        #searchBtn:hover {
+            background-color: #3a5bc7;
+        }
+
+        #newRecordBtn {
+            background-color: var(--gray);
+            color: white;
+        }
+
+        #newRecordBtn:hover {
+            background-color: #5a6268;
+        }
+
+        select[multiple] {
+            height: auto;
+            min-height: 100px;
+            padding: 5px;
+        }
+
+        select[multiple] option {
+            padding: 5px;
+            margin: 2px 0;
+            border-radius: 4px;
+        }
+
+        select[multiple] option:hover {
+            background-color: #e9ecef;
+        }
+
+        select[multiple] option:checked {
+            background-color: #4e73df;
+            color: white;
+        }
+
+    </style>
+    <script>
+        $(document).ready(function() {
+            // Initialize dropdowns
+            function initializeDropdowns() {
+                $.getJSON('/get_divisions', function(divisions) {
+                    $('#division').empty().append('<option value="">Select Division</option>');
+                    divisions.forEach(function(division) {
+                        $('#division').append(new Option(division[1], division[0]));
+                    });
+                }).fail(function() {
+                    console.error("Error loading divisions");
+                });
+            }
+            initializeDropdowns();
+
+            // New: Employee type change handler
+            $('#employeeType').change(function() {
+                const type = $(this).val();
+                $('#grampanchayat').attr('multiple', type === 'cluster');
+                $('#lgdCodeDisplay').empty();
+                
+                if (type === 'cluster') {
+                    $('#grampanchayat').attr('size', '4'); // Show multiple options
+                    $('#grampanchayat').removeAttr('required'); // Remove required for multiple
+                    $('#grampanchayat').val([]); // Clear selection
+                } else {
+                    $('#grampanchayat').removeAttr('size');
+                    $('#grampanchayat').attr('required', 'required');
+                    $('#grampanchayat').val('');
+                }
+            });
+
+            // Updated Grampanchayat change handler
+            $('#grampanchayat').change(function() {
+                const selectedOptions = Array.from($(this).find('option:selected'));
+                const lgdCodes = selectedOptions.map(option => option.value).join(', ');
+                $('#lgdCodeDisplay').empty();
+                
+                if (lgdCodes) {
+                    $('#lgdCodeDisplay').text(lgdCodes);
+                } else {
+                    $('#lgdCodeDisplay').text('Not selected');
+                }
+            });
+
+            // Division change handler (updated to reset employee type)
+            $('#division').change(function() {
+                var divisionId = $(this).val();
+                $('#district').empty().append(new Option("Select District", ""));
+                $('#block').empty().append(new Option("Select Block", ""));
+                $('#grampanchayat').empty().append(new Option("Select Grampanchayat", ""));
+                $('#lgdCodeDisplay').empty();
+                if (!$('#searchBtn').is(':hidden')) {
+                    $('#employeeType').val('individual').trigger('change');
+                }
+
+                if (divisionId) {
+                    $.getJSON('/get_districts/' + divisionId, function(districts) {
+                        districts.forEach(function(district) {
+                            $('#district').append(new Option(district[1], district[0]));
+                        });
+                    }).fail(function() {
+                        console.error("Error loading districts for division:", divisionId);
+                    });
+                }
+            });
+
+            // District change handler
+            $('#district').change(function() {
+                var districtId = $(this).val();
+                $('#block').empty().append(new Option("Select Block", ""));
+                $('#grampanchayat').empty().append(new Option("Select Grampanchayat", ""));
+                $('#lgdCodeDisplay').empty();
+
+                if (districtId) {
+                    $.getJSON('/get_blocks/' + districtId, function(blocks) {
+                        blocks.forEach(function(block) {
+                            $('#block').append(new Option(block[1], block[0]));
+                        });
+                    }).fail(function() {
+                        console.error("Error loading blocks for district:", districtId);
+                    });
+                }
+            });
+
+            // Block change handler
+            $('#block').change(function() {
+                var blockId = $(this).val();
+                $('#grampanchayat').empty().append(new Option("Select Grampanchayat", ""));
+                $('#lgdCodeDisplay').empty();
+
+                if (blockId) {
+                    $.getJSON('/get_grampanchayats/' + blockId, function(grampanchayats) {
+                        grampanchayats.forEach(function(grampanchayat) {
+                            $('#grampanchayat').append(new Option(grampanchayat[1], grampanchayat[0]));
+                        });
+                    }).fail(function() {
+                        console.error("Error loading grampanchayats for block:", blockId);
+                    });
+                }
+            });
+
+            // Grampanchayat change handler
+            $('#grampanchayat').change(function() {
+                var lgdCode = $(this).val();
+                $('#lgdCodeDisplay').empty();
+                
+                if (lgdCode) {
+                    $('#lgdCodeDisplay').text(lgdCode);
+                } else {
+                    $('#lgdCodeDisplay').text('Not selected');
+                }
+            });
+
+            // Form field handlers
+            $('#maritalStatus').change(function () {
+                var status = $(this).val();
+                if (status === 'Married') {
+                    $('#spouseNameGroup').show();
+                    $('#numChildrenGroup').show();
+                    $('#anniversaryDiv').removeClass('d-none');
+                } else {
+                    $('#spouseNameGroup, #numChildrenGroup').hide();
+                    $('#anniversaryDiv').addClass('d-none');
+                    $('#anniversary_date').val('');
+                }
+            });
+
+            $('#anniversary_date').change(function () {
+                var dob = new Date($('#dob').val());
+                var anniversary = new Date($(this).val());
+
+                if ($('#dob').val() && anniversary) {
+                    var minAnniversary = new Date(dob);
+                    minAnniversary.setFullYear(minAnniversary.getFullYear() + 18);
+
+                    if (anniversary < minAnniversary) {
+                        alert("Anniversary date must be at least 18 years after the Date of Birth.");
+                        $(this).val('');
+                    }
+                }
+            });
+
+            $('#religion').change(function () {
+                $(this).val() === 'Other' ? $('#otherReligionGroup').show() : $('#otherReligionGroup').hide();
+            });
+
+            $('#category').change(function () {
+                $(this).val() === 'Other' ? $('#otherCategoryGroup').show() : $('#otherCategoryGroup').hide();
+            });
+
+            $('#education').change(function () {
+                $(this).val() === 'Other' ? $('#otherEducationGroup').show() : $('#otherEducationGroup').hide();
+            });
+
+            $('#sameWhatsapp').change(function () {
+                $('#whatsappNumberGroup').toggle(!$(this).is(':checked'));
+            });
+
+            $('#sameCurrentAddress').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#currentAddressGroup').hide();
+                } else {
+                    $('#currentAddressGroup').show();
+                }
+            }).trigger('change');
+
+            $('#bankName').change(function () {
+                $(this).val() === 'Other' ? $('#otherBankGroup').show() : $('#otherBankGroup').hide();
+            });
+
+            // Search functionality
+            $('#searchBtn').click(function() {
+                const searchTerm = $('#searchTerm').val().trim();
+                if (!searchTerm) {
+                    $('#searchMessage').html('<div class="alert alert-danger">Please enter a search term</div>');
+                    return;
+                }
+
+                $('#searchMessage').html('<div class="alert alert-info">Searching...</div>');
+                
+                $.ajax({
+                    url: '/search_record',
+                    type: 'GET',
+                    data: { term: searchTerm },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success && response.record) {
+                            populateForm(response.record, response.location_ids, response.grampanchayat_details || []);
+                            $('#searchMessage').html('<div class="alert alert-success">Record found</div>');
+                            $('#searchBtn').hide();
+                            $('#newRecordBtn').show();
+                            $('html, body').animate({ scrollTop: 0 }, 500);
+                        } else {
+                            $('#searchMessage').html(`<div class="alert alert-danger">${response.message || 'Record not found'}</div>`);
+                        }
+                    },
+                    error: function(xhr) {
+                        $('#searchMessage').html('<div class="alert alert-danger">Error searching for record</div>');
+                        console.error("Search error:", xhr.responseText);
+                    }
+                });
+            });
+
+            // New record button
+            $('#newRecordBtn').click(function() {
+                $('#employeeForm')[0].reset();
+                $('#searchMessage').empty();
+                $('#searchBtn').show();
+                $(this).hide();
+                $('html, body').animate({ scrollTop: 0 }, 500);
+                initializeDropdowns();
+            });
+
+            // Function to populate form with record data
+            function populateForm(record, locationIds, grampanchayatDetails) {
+                console.log("Populating form with record:", record);
+                console.log("Location IDs:", locationIds);
+                console.log("Grampanchayat Details:", grampanchayatDetails);
+                
+                // Reset form first
+                $('#employeeForm')[0].reset();
+
+                // Set employee type
+                setTimeout(() => {
+                    if (locationIds) {
+                        const gps = record.vle_type === 'cluster'
+                            ? locationIds.grampanchayat_ids
+                            : [locationIds.grampanchayat_id];
+
+                        loadLocationHierarchy(
+                            locationIds.division_id,
+                            locationIds.district_id,
+                            locationIds.block_id,
+                            gps
+                        );
+
+                        // ✅ Set employee type AFTER dropdowns are loaded
+                        setTimeout(() => {
+                            $('#employeeType').val(record.vle_type).trigger('change');
+                        }, 1000); // Enough delay to ensure division change handler is done
+                    }
+                }, 300);
+
+                // Basic info
+                $('#cscId').val(record.csc_id);
+                $('#firstName').val(record.first_name);
+                $('#fatherName').val(record.father_name);
+                $('#motherName').val(record.mother_name);
+                $('#surname').val(record.surname);
+                $('#blood_group').val(record.blood_group);
+                $('#gender').val(record.gender);
+                $('#dob').val(record.dob_formatted || record.dob);
+                
+                // Marital status and dependent fields
+                $('#maritalStatus').val(record.marital_status).trigger('change');
+                if (record.marital_status === 'Married') {
+                    $('#spouseName').val(record.spouse_name || '');
+                    $('#numChildren').val(record.num_children || '');
+                    $('#anniversary_date').val(record.anniversary_date_formatted || record.anniversary_date);
+                }
+                
+                // Handle "Other" fields
+                function handleOtherField(dropdownId, inputId, value) {
+                    if (value && !$(dropdownId + ' option').filter(function() { 
+                        return $(this).text() === value; 
+                    }).length) {
+                        $(dropdownId).val('Other').trigger('change');
+                        $(inputId).val(value);
+                    } else {
+                        $(dropdownId).val(value);
+                    }
+                }
+
+                handleOtherField('#religion', '#otherReligion', record.religion);
+                handleOtherField('#category', '#otherCategory', record.category);
+                handleOtherField('#education', '#otherEducation', record.education);
+                handleOtherField('#bankName', '#otherBank', record.bank_name);
+                
+                $('#caste').val(record.caste);
+                $('#instituteName').val(record.institute_name);
+                $('#cibilScore').val(record.cibil_score);
+                
+                // Contact info
+                $('#contactNumber').val(record.contact_number);
+                if (record.whatsapp_number === record.contact_number) {
+                    $('#sameWhatsapp').prop('checked', true).trigger('change');
+                } else {
+                    $('#whatsappNumber').val(record.whatsapp_number);
+                }
+                $('#email').val(record.email);
+                
+                // Address info
+                const permAddressParts = record.permanent_address.split(/,\s*/);
+                $('#permAddressLine1').val(permAddressParts[0] || '');
+                $('#permAddressLine2').val(permAddressParts[1] || '');
+                const cityPincode = permAddressParts[2] ? permAddressParts[2].split(' - ') : [];
+                $('#permCity').val(cityPincode[0] || '');
+                $('#permPincode').val(cityPincode[1] || '');
+                
+                if (record.current_address === record.permanent_address) {
+                    $('#sameCurrentAddress').prop('checked', true).trigger('change');
+                } else if (record.current_address) {
+                    const currAddressParts = record.current_address.split(/,\s*/);
+                    $('#currAddressLine1').val(currAddressParts[0] || '');
+                    $('#currAddressLine2').val(currAddressParts[1] || '');
+                    const currCityPincode = currAddressParts[2] ? currAddressParts[2].split(' - ') : [];
+                    $('#currCity').val(currCityPincode[0] || '');
+                    $('#currPincode').val(currCityPincode[1] || '');
+                }
+                
+                // Identification
+                $('#panNumber').val(record.pan_number);
+                $('#aadharNumber').val(record.aadhar_number);
+                
+                // Bank details
+                $('#ifsc').val(record.ifsc_code);
+                $('#accountNumber').val(record.account_number);
+                $('#branchName').val(record.branch_name);
+
+                // Location handling
+                if (locationIds) {
+                    if (record.vle_type === 'individual') {
+                        loadLocationHierarchy(
+                            locationIds.division_id,
+                            locationIds.district_id,
+                            locationIds.block_id,
+                            [locationIds.grampanchayat_id]
+                        );
+                    } else if (record.vle_type === 'cluster' && locationIds.grampanchayat_ids) {
+                        loadLocationHierarchy(
+                            locationIds.division_id,
+                            locationIds.district_id,
+                            locationIds.block_id,
+                            locationIds.grampanchayat_ids
+                        );
+                    }
+                } else {
+                    // Fallback to name-based lookup if location_ids not available
+                    loadAndSelectGPDetails(
+                        record.division,
+                        record.district,
+                        record.block,
+                        record.grampanchayat,
+                        record.lgd_code ? record.lgd_code.split(', ') : []
+                    );
+                }
+            }
+
+            // Modified to handle multiple grampanchayats
+            function loadLocationHierarchy(divisionId, districtId, blockId, grampanchayatIds) {
+                console.log("Loading location hierarchy:", {divisionId, districtId, blockId, grampanchayatIds});
+                
+                // Load division
+                $('#division').val(divisionId).trigger('change');
+                
+                // After division loads, load district
+                setTimeout(function() {
+                    $.getJSON('/get_districts/' + divisionId, function(districts) {
+                        $('#district').empty().append('<option value="">Select District</option>');
+                        districts.forEach(d => $('#district').append(new Option(d[1], d[0])));
+                        $('#district').val(districtId).trigger('change');
+                        
+                        // After district loads, load block
+                        setTimeout(function() {
+                            $.getJSON('/get_blocks/' + districtId, function(blocks) {
+                                $('#block').empty().append('<option value="">Select Block</option>');
+                                blocks.forEach(b => $('#block').append(new Option(b[1], b[0])));
+                                $('#block').val(blockId).trigger('change');
+                                
+                                // After block loads, load grampanchayat
+                                setTimeout(function() {
+                                    $.getJSON('/get_grampanchayats/' + blockId, function(gps) {
+                                        $('#grampanchayat').empty().append('<option value="">Select Grampanchayat</option>');
+                                        gps.forEach(gp => $('#grampanchayat').append(new Option(gp[1], gp[0])));
+
+                                        // ✅ Delay assigning values to ensure 'multiple' has taken effect
+                                        setTimeout(function() {
+                                            if (grampanchayatIds && grampanchayatIds.length > 0) {
+                                                $('#grampanchayat').val(grampanchayatIds);
+                                                $('#lgdCodeDisplay').text(grampanchayatIds.join(', '));
+                                            }
+                                        }, 200);
+
+                                    });
+                                }, 300);
+                            });
+                        }, 300);
+                    });
+                }, 300);
+            }
+
+            // Fallback function for name-based GP lookup
+            function loadAndSelectGPDetails(divisionName, districtName, blockName, grampanchayatName, lgdCode) {
+                console.log("Using name-based fallback lookup");
+                
+                $.getJSON('/get_divisions', function(divisions) {
+                    const division = divisions.find(d => d[1] === divisionName);
+                    if (division) {
+                        $('#division').val(division[0]).trigger('change');
+                        
+                        setTimeout(function() {
+                            $.getJSON('/get_districts/' + division[0], function(districts) {
+                                const district = districts.find(d => d[1] === districtName);
+                                if (district) {
+                                    $('#district').val(district[0]).trigger('change');
+                                    
+                                    setTimeout(function() {
+                                        $.getJSON('/get_blocks/' + district[0], function(blocks) {
+                                            const block = blocks.find(b => b[1] === blockName);
+                                            if (block) {
+                                                $('#block').val(block[0]).trigger('change');
+                                                
+                                                setTimeout(function() {
+                                                    $.getJSON('/get_grampanchayats/' + block[0], function(gps) {
+                                                        $('#grampanchayat').empty().append('<option value="">Select Grampanchayat</option>');
+                                                        gps.forEach(gp => $('#grampanchayat').append(new Option(gp[1], gp[0])));
+                                                        
+                                                        // Find matching grampanchayat
+                                                        const gp = gps.find(g => 
+                                                            (g[1] === grampanchayatName && g[0] === lgdCode) || 
+                                                            g[0] === lgdCode
+                                                        );
+                                                        
+                                                        if (gp) {
+                                                            setTimeout(function() {
+                                                                $('#grampanchayat').val(gp[0]);
+                                                                $('#lgdCodeDisplay').text(gp[0]);
+                                                            }, 100);
+                                                        }
+                                                    });
+                                                }, 300);
+                                            }
+                                        });
+                                    }, 300);
+                                }
+                            });
+                        }, 300);
+                    }
+                });
+            }
+
+            // Form submission
+            $('#employeeForm').submit(function(e) {
+                const cibilScore = $('#cibilScore').val();
+                if (!/^\d{3}$/.test(cibilScore) || parseInt(cibilScore) < 300 || parseInt(cibilScore) > 900) {
+                    alert('Please enter a valid CIBIL score between 300-900');
+                    return false;
+                }
+
+                const permPincode = $('#permPincode').val();
+                if (!/^\d{6}$/.test(permPincode)) {
+                    alert('Please enter a valid 6-digit pincode for permanent address');
+                    return false;
+                }
+                
+                if (!$('#sameCurrentAddress').is(':checked')) {
+                    const currPincode = $('#currPincode').val();
+                    if (currPincode && !/^\d{6}$/.test(currPincode)) {
+                        alert('Please enter a valid 6-digit pincode for current address');
+                        return false;
+                    }
+                }
+
+                e.preventDefault();
+                
+                const submitBtn = $(this).find('button[type="submit"]');
+                const originalBtnText = submitBtn.html();
+                submitBtn.html('<i class="fa fa-spinner fa-spin"></i> Processing...');
+                submitBtn.prop('disabled', true);
+                
+                // Clear previous messages
+                $('#form-message').html('').removeClass('alert-success alert-danger');
+                
+                // Additional validation for grampanchayat selection
+                const employeeType = $('#employeeType').val();
+                const selectedGPs = $('#grampanchayat').val() || [];
+                
+                if (employeeType === 'cluster' && selectedGPs.length < 2) {
+                    alert('Please select at least 2 grampanchayats for cluster type');
+                    return false;
+                } else if (employeeType === 'individual' && selectedGPs.length !== 1) {
+                    alert('Please select exactly 1 grampanchayat for individual type');
+                    return false;
+                }
+
+                // Determine if this is an update or new submission
+                const isUpdate = $('#searchBtn').is(':hidden');
+                const url = isUpdate ? '/update_record' : '/submit_form';
+                
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            $('#form-message').html(`
+                                <div class="alert alert-success">
+                                    ✅ ${response.message}
+                                </div>
+                            `).addClass('alert-success');
+                            
+                            if (!isUpdate) {
+                                $('#employeeForm')[0].reset();
+                                initializeDropdowns();
+                            }
+                        } else {
+                            $('#form-message').html(`
+                                <div class="alert alert-danger">
+                                    ❌ ${response.message}
+                                </div>
+                            `).addClass('alert-danger');
+                        }
+                    },
+                    error: function(xhr) {
+                        $('#form-message').html(`
+                            <div class="alert alert-danger">
+                                ❌ Error: ${xhr.responseJSON?.message || xhr.statusText || 'Unknown error'}
+                            </div>
+                        `).addClass('alert-danger');
+                    },
+                    complete: function() {
+                        submitBtn.html(originalBtnText);
+                        submitBtn.prop('disabled', false);
+                        
+                        // Scroll to the message
+                        $('html, body').animate({
+                            scrollTop: $('#form-message').offset().top - 100
+                        }, 500);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="CSC Logo" class="logo">
+        </div>
+        <h1>VLE Details Form</h1>
+        <div class="search-section" style="margin-bottom: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+            <h3>Search Existing Record</h3>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="searchTerm" placeholder="Enter CSC ID, Aadhar, or Phone" style="flex: 1; padding: 10px;">
+                <button id="searchBtn" style="padding: 10px 20px; background: #4e73df; color: white; border: none; border-radius: 5px;">Search</button>
+                <button id="newRecordBtn" style="padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 5px; display: none;">New Record</button>
+            </div>
+            <div id="searchMessage" style="margin-top: 10px;"></div>
+        </div>
+        <form id="employeeForm">
+            <h2>GP Details</h2>
+            <div class="form-group">
+                <label for="division">Division:</label>
+                <select id="division" name="division" required>
+                    <option value="">Select Division</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="district">District:</label>
+                <select id="district" name="district" required></select>
+            </div>
+            <div class="form-group">
+                <label for="block">Block:</label>
+                <select id="block" name="block" required></select>
+            </div>
+            <div class="form-group">
+                <label for="employeeType">GP Type:</label>
+                <select id="employeeType" name="employeeType" required>
+                    <option value="individual">Individual (Single GP)</option>
+                    <option value="cluster">Cluster (Multiple GPs)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="grampanchayat">Grampanchayat:</label>
+                <div class="form-control-container">
+                    <select id="grampanchayat" name="grampanchayat" required></select>
+                    <div id="lgdCodeDisplay" class="lgd-code-display"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="cscId">CSC ID:</label>
+                <input type="text" id="cscId" name="cscId" required pattern="\d{8}00\d{2}" title="CSC ID must be 12 digits with 9th and 10th digits as '00'">
+            </div>
+            <h2>Personal Details</h2>
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" required pattern="[A-Za-z]+" title="Only letters allowed">
+            </div>
+            <div class="form-group">
+                <label for="fatherName">Father's Name:</label>
+                <input type="text" id="fatherName" name="fatherName" required pattern="[A-Za-z]+" title="Only letters allowed">
+            </div>
+            <div class="form-group">
+                <label for="motherName">Mother's Name:</label>
+                <input type="text" id="motherName" name="motherName" required pattern="[A-Za-z]+" title="Only letters allowed">
+            </div>
+            <div class="form-group">
+                <label for="surname">Surname:</label>
+                <input type="text" id="surname" name="surname" required pattern="[A-Za-z]+" title="Only letters allowed">
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="blood_group">Blood Group</label>
+                <select class="form-control" id="blood_group" name="blood_group" required>
+                  <option value="" selected disabled>-- Select Blood Group --</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="maritalStatus">Marital Status:</label>
+                <select id="maritalStatus" name="maritalStatus" required>
+                    <option value="">Select Status</option>
+                    <option value="Married">Married</option>
+                    <option value="Unmarried">Unmarried</option>
+                    <option value="Divorced">Divorced</option>
+                    <option value="Widowed">Widowed</option>
+                </select>
+            </div>
+            <div class="form-group" id="spouseNameGroup" style="display: none;">
+                <label for="spouseName">Spouse Name:</label>
+                <input type="text" id="spouseName" name="spouseName" pattern="[A-Za-z ]+" title="Only letters allowed">
+            </div>
+            <div class="form-group" id="numChildrenGroup" style="display: none;">
+                <label for="numChildren">Number of Children:</label>
+                <input type="number" id="numChildren" name="numChildren" min="0" step="1">
+            </div>
+            <div class="form-group col-md-4 d-none" id="anniversaryDiv">
+                <label for="anniversary_date">Anniversary Date</label>
+                <input type="date" class="form-control" id="anniversary_date" name="anniversary_date">
+            </div>
+            <div class="form-group">
+                <label for="religion">Religion:</label>
+                <select id="religion" name="religion" required>
+                    <option value="">Select Religion</option>
+                    <option value="Hindu">Hindu</option>
+                    <option value="Muslim">Muslim</option>
+                    <option value="Christian">Christian</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group" id="otherReligionGroup" style="display: none;">
+                <label for="otherReligion">Enter Religion:</label>
+                <input type="text" id="otherReligion" name="otherReligion">
+            </div>
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select id="category" name="category" required>
+                    <option value="">Select Category</option>
+                    <option value="General">General</option>
+                    <option value="OBC">OBC</option>
+                    <option value="SC">SC</option>
+                    <option value="ST">ST</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group" id="otherCategoryGroup" style="display: none;">
+                <label for="otherCategory">Enter Category:</label>
+                <input type="text" id="otherCategory" name="otherCategory">
+            </div>
+            <div class="form-group">
+                <label for="caste">Caste:</label>
+                <input type="text" id="caste" name="caste">
+            </div>
+            <div class="form-group">
+                <label for="education">Education:</label>
+                <select id="education" name="education" required>
+                    <option value="">Select Education</option>
+                    <option value="10th">10th</option>
+                    <option value="12th">12th</option>
+                    <option value="Diploma">Diploma</option>
+                    <option value="Graduation">Graduation</option>
+                    <option value="Post-Graduation">Post-Graduation</option>
+                    <option value="PHD">PHD</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="instituteName">Institute / University Name</label>
+                <input type="text" class="form-control" id="instituteName" name="instituteName" placeholder="Enter institution name" required>
+            </div>
+            <div class="form-group" id="otherEducationGroup" style="display: none;">
+                <label for="otherEducation">Enter Education:</label>
+                <input type="text" id="otherEducation" name="otherEducation">
+            </div>
+            <div class="form-group">
+                <label for="cibilScore">CIBIL Score:</label>
+                <input type="text" 
+                       id="cibilScore" 
+                       name="cibilScore" 
+                       pattern="[0-9]{3}" 
+                       title="Please enter a 3-digit CIBIL score (300-900)"
+                       maxlength="3"
+                       oninput="validateCibilScore(this)">
+                <span class="field-note">(Range: 300-900)</span>
+            </div>
+            <div class="form-group">
+                <label for="contactNumber">Contact Number:</label>
+                <div class="form-control-container">
+                    <input type="text" id="contactNumber" name="contactNumber" pattern="\d{10}" required title="10 digit mobile number">
+                </div>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="sameWhatsapp" name="sameWhatsapp">
+                <label for="sameWhatsapp">Whatsapp number is same as Contact number</label>
+            </div>
+            <div class="form-group" id="whatsappNumberGroup">
+                <label for="whatsappNumber">WhatsApp Number:</label>
+                <input type="text" id="whatsappNumber" name="whatsappNumber" pattern="\d{10}" title="10 digit mobile number">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" required title="Enter a valid email">
+            </div>
+            <div class="form-group">
+                <label>Permanent Address:</label>
+                <div class="form-control-container">
+                    <div class="address-fields">
+                        <input type="text" id="permAddressLine1" name="permAddressLine1" placeholder="Address Line 1" required>
+                        <input type="text" id="permAddressLine2" name="permAddressLine2" placeholder="Address Line 2">
+                        <div class="address-row">
+                            <input type="text" id="permCity" name="permCity" placeholder="City" required>
+                            <input type="text" id="permPincode" name="permPincode" placeholder="Pincode" pattern="\d{6}" title="Enter 6 digit pincode" required>
+                        </div>
+                    </div>
+                    <div class="address-checkbox-group">
+                        <input type="checkbox" id="sameCurrentAddress" name="sameCurrentAddress">
+                        <label for="sameCurrentAddress">Current address is same as Permanent address</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Current Address Section (initially hidden if checkbox checked) -->
+            <div class="form-group" id="currentAddressGroup">
+                <label>Current Address:</label>
+                <div class="form-control-container">
+                    <div class="address-fields">
+                        <input type="text" id="currAddressLine1" name="currAddressLine1" placeholder="Address Line 1">
+                        <input type="text" id="currAddressLine2" name="currAddressLine2" placeholder="Address Line 2">
+                        <div class="address-row">
+                            <input type="text" id="currCity" name="currCity" placeholder="City">
+                            <input type="text" id="currPincode" name="currPincode" placeholder="Pincode" pattern="\d{6}" title=" Enter 6 digit pincode">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="panNumber">PAN Card Number:</label>
+                <input type="text" id="panNumber" name="panNumber" pattern="[A-Z]{3}P[A-Z][0-9]{4}[A-Z]" title="Format: ABCPA1234Z">
+            </div>
+            <div class="form-group">
+                <label for="aadharNumber">Aadhar Card Number:</label>
+                <input type="text" id="aadharNumber" name="aadharNumber" pattern="(?!\d*0000)\d{12}" title="12 digit number, last 4 digits not all 0">
+            </div>
+            <h2>Bank Details</h2>
+            <div class="form-group">
+                <label for="bankName">Bank Name:</label>
+                <select id="bankName" name="bankName">
+                    <option value="">Select Bank</option>
+                    <option value="HDFC Bank">HDFC Bank</option>
+                    <option value="ICICI Bank">ICICI Bank</option>
+                    <option value="State Bank of India">State Bank of India</option>
+                    <option value="Kotak Mahindra Bank">Kotak Mahindra Bank</option>
+                    <option value="Axis Bank">Axis Bank</option>
+                    <option value="Bank of Baroda">Bank of Baroda</option>
+                    <option value="Punjab National Bank">Punjab National Bank</option>
+                    <option value="Union Bank of India">Union Bank of India</option>
+                    <option value="Indian Overseas Bank">Indian Overseas Bank</option>
+                    <option value="Canara Bank">Canara Bank</option>
+                    <option value="Bank of Maharashtra">Bank of Maharashtra</option>
+                    <option value="Bank of India">Bank of India</option>
+                    <option value="Induslnd Bank">Induslnd Bank</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group" id="otherBankGroup" style="display: none;">
+                <label for="otherBank">Enter Bank Name:</label>
+                <input type="text" id="otherBank" name="otherBank">
+            </div>
+            <div class="form-group">
+                <label for="ifsc">IFSC Code:</label>
+                <input type="text" id="ifsc" name="ifsc" pattern="[A-Z]{4}0[0-9]{6}" title="Enter valid IFSC code">
+            </div>
+            <div class="form-group">
+                <label for="accountNumber">Account Number:</label>
+                <input type="text" id="accountNumber" name="accountNumber" pattern="\d{9,20}" title="Account number should be 9 to 20 digits">
+            </div>
+            <div class="form-group">
+                <label for="branchName">Branch Name:</label>
+                <input type="text" id="branchName" name="branchName" pattern="[A-Za-z ]+" title="Only letters allowed">
+            </div>
+            <div class="submit-row">
+                <button type="submit">Submit</button>
+                <div id="form-message" style="margin-top: 20px;"></div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

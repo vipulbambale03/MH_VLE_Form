@@ -1,0 +1,1 @@
+select * from vle_details;
