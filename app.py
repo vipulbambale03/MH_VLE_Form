@@ -25,13 +25,19 @@ def index():
 
 @app.route('/get_divisions', methods=['GET'])
 def get_divisions():
-    connection = get_db_connection()
-    cursor = connection.cursor(dictionary=False)
-    cursor.execute("SELECT * FROM divisions")
-    divisions = cursor.fetchall()
-    cursor.close()
-    connection.close()
-    return jsonify(divisions)
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor()
+        cursor.execute("SELECT id, name FROM divisions")
+        divisions = cursor.fetchall()
+        print("Fetched divisions:", divisions)
+        return jsonify(divisions)
+    except Exception as e:
+        print("Error in get_divisions:", str(e))  # Logs to Render console
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if 'cursor' in locals(): cursor.close()
+        if 'connection' in locals(): connection.close()
 
 @app.route('/get_districts/<division_id>', methods=['GET'])
 def get_districts(division_id):
