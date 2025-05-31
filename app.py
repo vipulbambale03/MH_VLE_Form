@@ -252,6 +252,10 @@ def submit_form():
         
         cursor.execute(query, data)
         connection.commit()
+
+        # Send confirmation email
+        send_confirmation_email(data['email'], data)
+
         
         return jsonify({'success': True, 'message': 'Form submitted successfully!'})
     
