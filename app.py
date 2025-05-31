@@ -1,17 +1,11 @@
 from flask import Flask, render_template, request, jsonify
 import os
-from flask_cors import CORS
 import mysql.connector
-from mysql.connector import Error
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from dotenv import load_dotenv
 
 load_dotenv()
 port = int(os.environ.get("PORT", 5000))
 app = Flask(__name__)
-CORS(app)
 
 # Database connection
 def get_db_connection():
@@ -268,6 +262,112 @@ def submit_form():
     finally:
         if 'cursor' in locals(): cursor.close()
         if 'connection' in locals(): connection.close()
+
+def send_confirmation_email(recipient_email, form_data):
+    try:
+        # Mask sensitive information
+        def mask_aadhar(aadhar):
+            return f"**** **** {aadhar[-4:]}" if aadhar and len(aadhar) >= 4 else 'Not provided'
+        
+        def mask_pan(pan):
+            return f"{pan[:2]}*****{pan[-2:]}" if pan and len(pan) >= 4 else 'Not provided'
+        
+        def mask_account(account):
+            return f"****{account[-4:]}" if account and len(account) >= 4 else 'Not provided'
+
+        # Prepare email data with masked values
+        email_data = {
+            **form_data,
+            'aadhar_number': mask_aadhar(form_data.get('aadhar_number')),
+            'pan_number': mask_pan(form_data.get('pan_number')),
+            'account_number': mask_account(form_data.get('account_number')),
+            # Format dates properly
+            'dob': form_data.get('dob', 'Not provided'),
+            'anniversary_date': form_data.get('anniversary_date', 'Not provided')
+        }
+
+        # Create message container
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = os.getenv('EMAIL_SUBJECT', 'Employee Details Submission Confirmation')
+        msg['From'] = os.getenv('EMAIL_FROM')
+        msg['To'] = recipient_email
+        msg['Date'] = formatdate(localtime=True)
+        
+        # Add admin as BCC if configured
+        if os.getenv('EMAIL_ADMIN'):
+            msg['Bcc'] = os.getenv('EMAIL_ADMIN')
+        
+        # Render HTML template
+        html_content = render_template('email_confirmation.html', **email_data)
+        
+        # Create plain text version
+        text_content = f"""Employee Details Submission Confirmation
+
+        Dear {form_data['first_name']} {form_data['surname']},
+        
+        Thank you for submitting your details. Here is the information you provided:
+        
+        BASIC INFORMATION:
+        - Employee Type: {form_data['vle_type']}
+        - CSC ID: {form_data['csc_id']}
+        - Full Name: {form_data['first_name']} {form_data['surname']}
+        - Father's Name: {form_data['father_name']}
+        - Mother's Name: {form_data['mother_name']}
+        - Date of Birth: {form_data.get('dob', 'Not provided')}
+        
+        PERSONAL DETAILS:
+        - Gender: {form_data['gender']}
+        - Marital Status: {form_data['marital_status']}
+        - Spouse Name: {form_data.get('spouse_name', 'N/A')}
+        - Number of Children: {form_data.get('num_children', '0')}
+        - Blood Group: {form_data.get('blood_group', 'N/A')}
+        
+        CONTACT INFORMATION:
+        - Mobile Number: {form_data['contact_number']}
+        - WhatsApp Number: {form_data['whatsapp_number']}
+        - Email Address: {form_data['email']}
+        
+        ADDRESS DETAILS:
+        - Permanent Address: {form_data['permanent_address']}
+        - Current Address: {form_data.get('current_address', 'Same as permanent address')}
+        
+        IDENTIFICATION DETAILS:
+        - PAN Number: {mask_pan(form_data.get('pan_number'))}
+        - Aadhar Number: {mask_aadhar(form_data.get('aadhar_number'))}
+        
+        BANK DETAILS:
+        - Bank Name: {form_data['bank_name']}
+        - Account Number: {mask_account(form_data.get('account_number'))}
+        - IFSC Code: {form_data.get('ifsc_code', 'Not provided')}
+        - Branch Name: {form_data.get('branch_name', 'Not provided')}
+        
+        LOCATION DETAILS:
+        - Division: {form_data['division']}
+        - District: {form_data['district']}
+        - Block: {form_data['block']}
+        - Grampanchayat: {form_data['grampanchayat']}
+        
+        This is an automated confirmation. Please do not reply to this email.
+        If you need to make any corrections, please contact the administrator.
+        """
+
+        # Attach both versions
+        msg.attach(MIMEText(text_content, 'plain'))
+        msg.attach(MIMEText(html_content, 'html'))
+        
+        # Send email
+        with smtplib.SMTP(os.getenv('SMTP_SERVER'), int(os.getenv('SMTP_PORT', 587))) as server:
+            server.starttls()
+            server.login(os.getenv('SMTP_USERNAME'), os.getenv('SMTP_PASSWORD'))
+            recipients = [recipient_email]
+            if os.getenv('EMAIL_ADMIN'):
+                recipients.append(os.getenv('EMAIL_ADMIN'))
+            server.sendmail(os.getenv('EMAIL_FROM'), recipients, msg.as_string())
+        
+        return True
+    except Exception as e:
+        print(f"Error sending confirmation email: {str(e)}")
+        return False
 
 @app.route('/search_record', methods=['GET'])
 def search_record():
