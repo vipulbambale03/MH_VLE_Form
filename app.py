@@ -203,7 +203,7 @@ def submit_form():
             'marital_status': form_data['maritalStatus'],
             'spouse_name': form_data.get('spouseName', ''),
             'num_children': int(form_data.get('numChildren', 0)) if form_data.get('numChildren') else None,
-            'anniversary_date': form_data.get('anniversary_date', None),
+            'anniversary_date': form_data.get('anniversary_date') or None,
             'religion': form_data['religion'] if form_data['religion'] != 'Other' else form_data.get('otherReligion', ''),
             'category': form_data['category'] if form_data['category'] != 'Other' else form_data.get('otherCategory', ''),
             'caste': form_data.get('caste', ''),
