@@ -26,7 +26,7 @@ def index():
 @app.route('/get_divisions', methods=['GET'])
 def get_divisions():
     connection = get_db_connection()
-    cursor = connection.cursor()
+    cursor = connection.cursor(dictionary=False)
     cursor.execute("SELECT * FROM divisions")
     divisions = cursor.fetchall()
     cursor.close()
@@ -36,7 +36,7 @@ def get_divisions():
 @app.route('/get_districts/<division_id>', methods=['GET'])
 def get_districts(division_id):
     connection = get_db_connection()
-    cursor = connection.cursor()
+    cursor = connection.cursor(dictionary=False)
     cursor.execute("SELECT * FROM districts WHERE division_id = %s", (division_id,))
     districts = cursor.fetchall()
     cursor.close()
@@ -46,7 +46,7 @@ def get_districts(division_id):
 @app.route('/get_blocks/<district_id>', methods=['GET'])
 def get_blocks(district_id):
     connection = get_db_connection()
-    cursor = connection.cursor()
+    cursor = connection.cursor(dictionary=False)
     cursor.execute("SELECT * FROM blocks WHERE district_id = %s", (district_id,))
     blocks = cursor.fetchall()
     cursor.close()
@@ -56,7 +56,7 @@ def get_blocks(district_id):
 @app.route('/get_grampanchayats/<block_id>', methods=['GET'])
 def get_grampanchayats(block_id):
     connection = get_db_connection()
-    cursor = connection.cursor()
+    cursor = connection.cursor(dictionary=False)
     cursor.execute("SELECT * FROM grampanchayats WHERE block_id = %s", (block_id,))
     grampanchayats = cursor.fetchall()
     cursor.close()
