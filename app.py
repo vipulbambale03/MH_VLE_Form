@@ -2,6 +2,11 @@ from flask import Flask, render_template, request, jsonify
 import os
 import mysql.connector
 from dotenv import load_dotenv
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.utils import formatdate
+
 
 load_dotenv()
 port = int(os.environ.get("PORT", 5000))
