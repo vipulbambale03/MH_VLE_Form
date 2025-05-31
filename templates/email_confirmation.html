@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #f5f5f5; padding: 15px; text-align: center; border-radius: 5px 5px 0 0; }
+        .section { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .section-title { color: #2c3e50; font-size: 18px; margin-bottom: 10px; font-weight: bold; }
+        .field { margin-bottom: 8px; display: flex; }
+        .field-label { font-weight: bold; width: 180px; }
+        .field-value { flex: 1; }
+        .footer { margin-top: 20px; font-size: 12px; color: #777; text-align: center; }
+        .sensitive { color: #d35400; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Employee Details Submission Confirmation</h2>
+        </div>
+        
+        <p>Dear {{ first_name }} {{ surname }},</p>
+        <p>Thank you for submitting your details to our system. Below is a summary of the information you provided:</p>
+        
+        <div class="section">
+            <div class="section-title">Basic Information</div>
+            <div class="field">
+                <span class="field-label">Employee Type:</span>
+                <span class="field-value">{{ vle_type }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">CSC ID:</span>
+                <span class="field-value">{{ csc_id }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Full Name:</span>
+                <span class="field-value">{{ first_name }} {{ surname }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Father's Name:</span>
+                <span class="field-value">{{ father_name }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Mother's Name:</span>
+                <span class="field-value">{{ mother_name }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Date of Birth:</span>
+                <span class="field-value">{{ dob }}</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Personal Details</div>
+            <div class="field">
+                <span class="field-label">Gender:</span>
+                <span class="field-value">{{ gender }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Marital Status:</span>
+                <span class="field-value">{{ marital_status }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Spouse Name:</span>
+                <span class="field-value">{{ spouse_name if spouse_name else 'N/A' }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Number of Children:</span>
+                <span class="field-value">{{ num_children if num_children else '0' }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Blood Group:</span>
+                <span class="field-value">{{ blood_group if blood_group else 'N/A' }}</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Contact Information</div>
+            <div class="field">
+                <span class="field-label">Mobile Number:</span>
+                <span class="field-value">{{ contact_number }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">WhatsApp Number:</span>
+                <span class="field-value">{{ whatsapp_number }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Email Address:</span>
+                <span class="field-value">{{ email }}</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Address Details</div>
+            <div class="field">
+                <span class="field-label">Permanent Address:</span>
+                <span class="field-value">{{ permanent_address }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Current Address:</span>
+                <span class="field-value">{{ current_address if current_address else 'Same as permanent address' }}</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Identification Details</div>
+            <div class="field">
+                <span class="field-label">PAN Number:</span>
+                <span class="field-value sensitive">{{ pan_number if pan_number else 'Not provided' }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Aadhar Number:</span>
+                <span class="field-value sensitive">{{ aadhar_number if aadhar_number else 'Not provided' }}</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Bank Details</div>
+            <div class="field">
+                <span class="field-label">Bank Name:</span>
+                <span class="field-value">{{ bank_name }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Account Number:</span>
+                <span class="field-value sensitive">{{ account_number if account_number else 'Not provided' }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">IFSC Code:</span>
+                <span class="field-value">{{ ifsc_code if ifsc_code else 'Not provided' }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Branch Name:</span>
+                <span class="field-value">{{ branch_name if branch_name else 'Not provided' }}</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Location Details</div>
+            <div class="field">
+                <span class="field-label">Division:</span>
+                <span class="field-value">{{ division }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">District:</span>
+                <span class="field-value">{{ district }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Block:</span>
+                <span class="field-value">{{ block }}</span>
+            </div>
+            <div class="field">
+                <span class="field-label">Grampanchayat:</span>
+                <span class="field-value">{{ grampanchayat }}</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>This is an automated confirmation. Please do not reply to this email.</p>
+            <p>If you need to make any corrections, please contact the administrator.</p>
+            <p>© {% now 'Y' %} Your Organization Name. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
