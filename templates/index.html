@@ -674,11 +674,22 @@
                         if (response.success && response.record) {
                             populateForm(response.record, response.location_ids, response.grampanchayat_details || []);
                             $('#searchMessage').html('<div class="alert alert-success">Record found</div>');
+                            setTimeout(() => {
+                                $('#searchMessage').fadeOut(400, function() {
+                                    $(this).empty().show();
+                                });
+                            }, 3000);
                             $('#searchBtn').hide();
                             $('#newRecordBtn').show();
                             $('html, body').animate({ scrollTop: 0 }, 500);
                         } else {
                             $('#searchMessage').html(`<div class="alert alert-danger">${response.message || 'Record not found'}</div>`);
+                            setTimeout(() => {
+                                $('#searchMessage').fadeOut(400, function() {
+                                    $(this).empty().show();
+                                });
+                            }, 3000);
+
                         }
                     },
                     error: function(xhr) {
@@ -987,6 +998,13 @@
                                     ✅ ${response.message}
                                 </div>
                             `).addClass('alert-success');
+                            // Auto-hide the form message after 3 seconds
+                            setTimeout(() => {
+                                $('#form-message').fadeOut(400, function() {
+                                    $(this).empty().show(); // clears and re-shows for next use
+                                });
+                            }, 3000);
+
                             
                             if (!isUpdate) {
                                 $('#employeeForm')[0].reset();
@@ -998,6 +1016,11 @@
                                     ❌ ${response.message}
                                 </div>
                             `).addClass('alert-danger');
+                            setTimeout(() => {
+                                $('#form-message').fadeOut(400, function() {
+                                    $(this).empty().show(); // clears and re-shows for next use
+                                });
+                            }, 3000);
                         }
                     },
                     error: function(xhr) {
