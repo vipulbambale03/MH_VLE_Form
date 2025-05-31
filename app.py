@@ -1,11 +1,17 @@
 from flask import Flask, render_template, request, jsonify
 import os
+from flask_cors import CORS
 import mysql.connector
+from mysql.connector import Error
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from dotenv import load_dotenv
 
 load_dotenv()
 port = int(os.environ.get("PORT", 5000))
 app = Flask(__name__)
+CORS(app)
 
 # Database connection
 def get_db_connection():
