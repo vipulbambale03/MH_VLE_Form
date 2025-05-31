@@ -84,7 +84,12 @@ def submit_form():
         vle_type = form_data['employeeType']
         
         # Get selected grampanchayats
-        grampanchayat_ids = request.form.getlist('grampanchayat') if vle_type == 'cluster' else [form_data['grampanchayat']]
+        if vle_type == 'cluster':
+            grampanchayat_ids = request.form.getlist('grampanchayat')
+        else:
+            gp = form_data.get('grampanchayat')
+            grampanchayat_ids = [gp] if gp else []
+
         
         # Validate grampanchayat selection
         if vle_type == 'cluster' and len(grampanchayat_ids) < 2:
