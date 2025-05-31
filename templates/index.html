@@ -960,9 +960,10 @@
                 
                 // Additional validation for grampanchayat selection
                 const employeeType = $('#employeeType').val();
-                const selectedGPs = $('#grampanchayat').val();
-                console.log("Employee Type:", employeeType, "Selected GPs:", selectedGPs);
 
+                // ALWAYS treat selectedGPs as an array, even if only 1 value is selected
+                const selectedGPs = [].concat($('#grampanchayat').val() || []);  // ✅ Fix applied
+                
                 if (employeeType === 'cluster' && selectedGPs.length < 2) {
                     alert('Please select at least 2 grampanchayats for cluster type');
                     return false;
