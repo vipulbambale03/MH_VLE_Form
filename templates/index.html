@@ -506,12 +506,12 @@
                 $('#lgdCodeDisplay').empty();
                 
                 if (type === 'cluster') {
-                    $('#grampanchayat').attr('size', '4'); // Show multiple options
-                    $('#grampanchayat').removeAttr('required'); // Remove required for multiple
-                    $('#grampanchayat').val([]); // Clear selection
+                    $('#grampanchayat').attr('multiple', true);
+                    $('#grampanchayat').attr('name', 'grampanchayat');  // keep as is
+                    $('#grampanchayat').val([]); // clear selection
                 } else {
-                    $('#grampanchayat').removeAttr('size');
-                    $('#grampanchayat').attr('required', 'required');
+                    $('#grampanchayat').removeAttr('multiple');
+                    $('#grampanchayat').attr('name', 'grampanchayat');  // keep as is
                     $('#grampanchayat').val('');
                 }
             });
