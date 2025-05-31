@@ -254,58 +254,10 @@ def submit_form():
         cursor.execute(query, data)
         connection.commit()
 
+        # After successful database insertion but before returning response
         try:
-            # Prepare data for email
-            email_data = {
-            'vle_type': vle_type,
-            'csc_id': form_data['cscId'],
-            'division': division_name,
-            'district': district_name,
-            'block': block_name,
-            'grampanchayat': ', '.join(grampanchayat_names),
-            'lgd_code': ', '.join(lgd_codes),
-            
-            # Personal Details
-            'first_name': form_data['firstName'],
-            'father_name': form_data['fatherName'],
-            'mother_name': form_data['motherName'],
-            'surname': form_data['surname'],
-            'dob': form_data['dob'],
-            'blood_group': form_data.get('blood_group', ''),
-            'gender': form_data['gender'],
-            'marital_status': form_data['maritalStatus'],
-            'spouse_name': form_data.get('spouseName', ''),
-            'num_children': int(form_data.get('numChildren', 0)) if form_data.get('numChildren') else None,
-            'anniversary_date': form_data.get('anniversary_date') or None,
-            'religion': form_data['religion'] if form_data['religion'] != 'Other' else form_data.get('otherReligion', ''),
-            'category': form_data['category'] if form_data['category'] != 'Other' else form_data.get('otherCategory', ''),
-            'caste': form_data.get('caste', ''),
-            'education': form_data['education'] if form_data['education'] != 'Other' else form_data.get('otherEducation', ''),
-            'institute_name': form_data['instituteName'],
-            'cibil_score': int(cibil_score),
-
-            # Contact Details
-            'contact_number': form_data['contactNumber'],
-            'whatsapp_number': form_data['contactNumber'] if same_whatsapp else form_data.get('whatsappNumber', ''),
-            'email': form_data['email'],
-            
-            # Address Details
-            'permanent_address': perm_address,
-            'current_address': curr_address,
-            
-            # Identification Details
-            'pan_number': form_data.get('panNumber', ''),
-            'aadhar_number': form_data.get('aadharNumber', ''),
-            
-            # Bank Details
-            'bank_name': form_data['bankName'] if form_data.get('bankName') != 'Other' else form_data.get('otherBank', ''),
-            'ifsc_code': form_data.get('ifsc', ''),
-            'account_number': form_data.get('accountNumber', ''),
-            'branch_name': form_data.get('branchName', '')
-        }
-            
             # Send confirmation email
-            email_sent = send_confirmation_email(form_data['email'], email_data)
+            email_sent = send_confirmation_email(form_data['email'], data)
             if not email_sent:
                 print("Warning: Email sending failed but form was submitted")
         except Exception as e:
