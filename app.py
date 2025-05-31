@@ -305,7 +305,9 @@ def send_confirmation_email(recipient_email, form_data):
         # Add admin as BCC if configured
         if os.getenv('EMAIL_ADMIN'):
             msg['Bcc'] = os.getenv('EMAIL_ADMIN')
-        
+
+        from datetime import datetime
+        email_data['submitted_year'] = datetime.now().year
         # Render HTML template
         html_content = render_template('email_confirmation.html', **email_data)
         
