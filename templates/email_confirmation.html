@@ -17,7 +17,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h2>Employee Details Submission Confirmation</h2>
+            <h2>VLE Details Submission Confirmation</h2>
         </div>
         
         <p>Dear {{ first_name }} {{ surname }},</p>
@@ -153,11 +153,16 @@
                 <span class="field-label">Grampanchayat:</span>
                 <span class="field-value">{{ grampanchayat }}</span>
             </div>
+            <div class="field">
+                <span class="field-label">LGD Code:</span>
+                <span class="field-value">{{ lgd_code }}</span>
+            </div>
         </div>
 
         <div class="footer">
             <p>This is an automated confirmation. Please do not reply to this email.</p>
-            <p>If you need to make any corrections, please contact the administrator on +91 7410009783.</p>
+            <p>If you need to make any corrections you can search and update your record with the help of your Mobile number / CSC ID / Aadhar number,<p> 
+            <p>If you face any issue please contact the administrator +91 7410009796.</p>
             <p>© {{ submitted_year }} Digigram Fintech Solutions LLP. All rights reserved.</p>
 
         </div>
