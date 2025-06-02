@@ -312,14 +312,14 @@ def send_confirmation_email(recipient_email, form_data):
         html_content = render_template('email_confirmation.html', **email_data)
         
         # Create plain text version
-        text_content = f"""Employee Details Submission Confirmation
+        text_content = f"""VLE Details Submission Confirmation
 
         Dear {form_data['first_name']} {form_data['surname']},
         
         Thank you for submitting your details. Here is the information you provided:
         
         BASIC INFORMATION:
-        - Employee Type: {form_data['vle_type']}
+        - VLE Type: {form_data['vle_type']}
         - CSC ID: {form_data['csc_id']}
         - Full Name: {form_data['first_name']} {form_data['surname']}
         - Father's Name: {form_data['father_name']}
@@ -357,9 +357,11 @@ def send_confirmation_email(recipient_email, form_data):
         - District: {form_data['district']}
         - Block: {form_data['block']}
         - Grampanchayat: {form_data['grampanchayat']}
+        - LGD Code: {form_data['lgd_code']}
         
         This is an automated confirmation. Please do not reply to this email.
-        If you need to make any corrections, please contact the administrator.
+        If you need to make any corrections you can search your record with the help of your Mobile number, CSC ID or Aadhar number, 
+        If you face any issue please contact the administrator +91 7410009796.
         """
 
         # Attach both versions
